@@ -1,0 +1,167 @@
+<html>
+<head>
+
+<title>Quiz</title>
+<script type="text/javascript" src="js/external/mootools-core-1.4.5-minified.js"></script>
+<script type="text/javascript" src="js/dg-count-down.js"></script>
+<script type="text/javascript" src="js/quiz.js"></script>
+<style type="text/css">
+
+body {
+	font-family: arial;
+	font-size: 25px;
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+	color: #E5E5E5;
+	margin-top: 15px;
+	margin-left: 100px;
+	line-height: 1.3cm;
+}
+
+.dg-question-label{ /* Question label */
+	font-weight:bold;
+}
+
+img{
+	border:0px;
+}
+#error {
+	font-style:italic;
+	color:red;
+	font-size:20px
+}
+
+</style>
+</head>
+<body>
+
+
+<div id="questions"></div>
+<div id="error"></div>
+<div id="result"></div>
+<script type="text/javascript">
+
+function showWrongAnswer(){
+    document.id('error').set('html', 'jawaban salah, coba lagi');
+}
+
+function showScore() {
+	
+	var score = quiz.getScore();
+	var el = new Element('h3');
+	el.set('html', 'Terima Kasih!');
+    document.id('result').adopt(el);
+
+	el = new Element('h1');
+	el.set('html', 'Nilai : ' + score.numCorrectAnswers + ' dari ' + score.numQuestions);
+    document.id('result').adopt(el);
+
+	if(score.incorrectAnswers.length > 0) {
+		el = new Element('h4');
+		el.set('html', 'Jawaban Salah');
+		document.id('result').adopt(el);
+
+		for(var i=0;i<score.incorrectAnswers.length;i++) {
+			var incorrectAnswer = score.incorrectAnswers[i];
+			el = new Element('div');
+			el.set('html', '<b>' +  incorrectAnswer.questionNumber + ': ' + incorrectAnswer.label + '</b>');
+			document.id('result').adopt(el);
+
+			el = new Element('div');
+			el.set('html', 'Jawaban Yang Benar : ' + incorrectAnswer.correctAnswer);
+            document.id('result').adopt(el);
+			el = new Element('div');
+			el.set('html', 'Jawaban Kamu : ' + incorrectAnswer.userAnswer);
+            document.id('result').adopt(el);
+
+		}
+	}
+
+}
+
+var questions = [
+	
+{
+	
+		label : ' 1. Tag untuk membuat paragraf adalah... ',
+		options : ['< p > < /p >', '< br > < /br >', '< div > < /div >',' < ul > < /ul >'],
+		answer : ['< p > < /p >'],
+		forceAnswer : true
+  },
+	{
+		label : '2. Tipe file (extention) untuk dokumen HTML adalah...',
+		options : ['.XML', '.HTML', '.PHP', '.SQL'],
+		answer : ['.HTML']
+			
+    },
+	{
+		label : '3. Tag heading dengan ukuran paling besar adalah...',
+		options : ['< h1 >', '< h3 >', '< h2 >', '< h6>'],
+		answer : ['< h1 >']
+		
+    },
+	{
+		label : '4. Tag untuk membuat ordered list adalah...',
+		options : ['< p > < /p>', '< ul > < /ul >', '< ol > < /ol >', '< br > < /br >'],
+		answer : ['< ol > < /ol >']
+    },
+	{
+		label : '5. Tag untuk membuat unordered list adalah...',
+		options : ['< p > < /p>', '< ul > < /ul >', '< ol > < /ol >', '< br > < /br >'],
+		answer : ['< ul > < /ul >']
+    },
+    {
+		label : '6. Tag membuat judul pada dokumen HTML adalah...',
+		options : ['< title > < /title >', '< body > < /body >', '< footer > < /footer >', '< header > < /header >' ],
+		answer : ['< title > < /title >']
+    },
+     {
+		label : '7. Tag untuk mengisi dokumen HTML adalah....',
+		options : ['< title > < /title >', '< body > < /body >', '< footer > < /footer >', '< header > < /header >' ],
+		answer : ['< body > < /body >']
+    },
+{
+		label : '8. Tag untuk membuat tulisan miring adalah....',
+		options : ['< em > < /em >','< h1 >','< h2 >' , '< div >'],
+		answer : ['< em > < /em >']
+    },
+{
+		label : '9. Tag untuk membuat tulisan tebal adalah...',
+		options : ['< italic >' , '< strong > < /strong >','< h1 >','< h2 >'],
+		answer : ['< strong > < /strong >']
+    },
+{
+		label : '10. Tag untuk membuat table adalah...',
+		options : ['< title > < /title >', '< body > < /body >', '< header > < /header >' ,'< table > < /table >'],
+		answer : ['< table > < /table >']
+    },	
+
+]
+
+function showAnswerAlert() {
+	document.id('error').set('html', 'pilih jawaban terlebuh dahulu');
+}
+function clearErrorBox() {
+    document.id('error').set('html','');
+}
+var quiz = new DG.Quiz({
+	questions : questions,
+	el : 'questions',
+    forceCorrectAnswer:false,
+
+	listeners : {
+		'finish' : showScore,
+		'missinganswer' : showAnswerAlert,
+		'sendanswer' : clearErrorBox,
+        'wrongAnswer' : showWrongAnswer
+	}
+});
+quiz.start();
+
+
+
+</script>
+
+</body>
+</html>
